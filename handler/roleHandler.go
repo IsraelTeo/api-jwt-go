@@ -30,9 +30,9 @@ func GetRoleById(w http.ResponseWriter, r *http.Request) {
 	model.ResponseJSON(w, http.StatusOK, response)
 }
 
-func GetRoles(w http.ResponseWriter, r *http.Request) {
+func GetAllRoles(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
-		response := model.NewResponse(model.MessageTypeError, "Method get not permit", nil)
+		response := model.NewResponse(model.MessageTypeSuccess, "Method get not permit", nil)
 		model.ResponseJSON(w, http.StatusMethodNotAllowed, response)
 		return
 	}
@@ -119,8 +119,7 @@ func DeleteRole(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	id := params["id"]
 	role := model.Role{}
-	err := db.GDB.First(&role, id)
-	if err != nil {
+	if err := db.GDB.First(&role, id); err != nil {
 		response := model.NewResponse(model.MessageTypeError, "Role not found", nil)
 		model.ResponseJSON(w, http.StatusNotFound, response)
 		return
